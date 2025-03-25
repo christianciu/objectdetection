@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>YOLO Object Detection</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.model_weight.label_tag }}
+            {{ form.model_weight }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.input_image.label_tag }}
+            {{ form.input_image }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.confidence.label_tag }}
+            {{ form.confidence }}
+        </div>
+        
+        <div class="form-group">
+            {{ form.overlap.label_tag }}
+            {{ form.overlap }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Detect Objects</button>
+    </form>
+
+    {% if detection and detection.output_image %}
+    <div class="result-section">
+        <h3>Detection Results</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Input Image</h4>
+                <img src="{{ detection.input_image.url }}" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <h4>Output Image</h4>
+                <img src="{{ detection.output_image.url }}" class="img-fluid">
+                <a href="{{ detection.output_image.url }}" download class="btn btn-success mt-2">
+                    Download Detected Image
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
