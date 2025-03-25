@@ -32,6 +32,27 @@
     {% if detection and detection.output_image %}
     <div class="result-section">
         <h3>Detection Results</h3>
+        
+        {% if detection.total_detections > 0 %}
+        <div class="alert alert-info">
+            <h4>Detection Summary</h4>
+            <p>Total Objects Detected: {{ detection.total_detections }}</p>
+            
+            {% if detection.class_counts %}
+            <h5>Breakdown by Class:</h5>
+            <ul>
+                {% for class_name, count in detection.class_counts.items %}
+                <li>{{ class_name }}: {{ count }} object(s)</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+            No objects detected in the image.
+        </div>
+        {% endif %}
+
         <div class="row">
             <div class="col-md-6">
                 <h4>Input Image</h4>

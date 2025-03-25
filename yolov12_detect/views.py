@@ -1,7 +1,6 @@
 import os
-import cv2
-import numpy as np
-from django.shortcuts import render, redirect
+import json
+from django.shortcuts import render
 from django.conf import settings
 from django.core.files import File
 from ultralytics import YOLO
@@ -11,42 +10,50 @@ from .models import YOLODetection
 def detect_objects(request):
     if request.method == 'POST':
         form = YOLODetectionForm(request.POST, request.FILES)
+
         if form.is_valid():
-            # Save the uploaded files
-            detection = form.save()
-            
             try:
+                # Save the model instance
+                detection = form.save()
                 # Load YOLO model
                 model = YOLO(detection.model_weight.path)
-                
-                # Get configuration
-                conf = detection.confidence
-                iou = detection.overlap
-                
-                # Prepare input image path
-                input_image_path = detection.input_image.path
-                
                 # Perform detection
                 results = model(
-                    input_image_path, 
-                    conf=conf, 
-                    iou=iou
+                    detection.input_image.path, 
+                    conf=detection.confidence, 
+                    iou=detection.overlap
                 )
                 
-                # Save output image
+                # Count detections
+                total_detections = 0
+                class_counts = {}
+                
+                for result in results:
+                    # Count total number of detections
+                    boxes = result.boxes
+                    total_detections = len(boxes)
+                    
+                    # Count detections by class
+                    for box in boxes:
+                        class_id = int(box.cls[0])
+                        class_name = model.names[class_id]
+                        class_counts[class_name] = class_counts.get(class_name, 0) + 1
+                
+                # Generate output image path
                 output_img_path = os.path.join(
                     settings.MEDIA_ROOT, 
                     'output_images', 
                     f'output_{detection.id}.jpg'
                 )
                 
-                # Get the first result (assuming single image)
-                result = results[0]
+                # Save result
+                results[0].save(output_img_path)
                 
-                # Plot results and save
-                result.save(output_img_path)
+                # Update model with detection details
+                detection.total_detections = total_detections
+                detection.class_counts = class_counts
                 
-                # Update model with output image
+                # Save output image
                 with open(output_img_path, 'rb') as f:
                     detection.output_image.save(
                         f'output_{detection.id}.jpg', 
@@ -55,13 +62,11 @@ def detect_objects(request):
                 
                 return render(request, 'detect.html', {
                     'form': form, 
-                    'detection': detection
+                    'detection': detection,
                 })
             
             except Exception as e:
-                # Handle errors
                 form.add_error(None, str(e))
-    
     else:
         form = YOLODetectionForm()
     
