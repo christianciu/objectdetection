@@ -1,21 +1,23 @@
 from django import forms
-from .models import YOLODetection
+from .models import YOLOModel, DetectionImage, YOLODetection
 
-class YOLODetectionForm(forms.ModelForm):
-    CLASSES_CHOICES = [
-        ('all', 'Detect All Classes'),
-        # Add your specific classes here
-    ]
 
-    selected_class = forms.ChoiceField(
-        choices=CLASSES_CHOICES, 
-        required=False, 
-        initial='all'
-    )
+class ModelUploadForm(forms.ModelForm):
+    class Meta:
+        model = YOLOModel
+        fields = ['name', 'weight_file']
 
+
+class ImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = DetectionImage
+        fields = ['name', 'image_file']
+
+
+class DetectionForm(forms.ModelForm):
     class Meta:
         model = YOLODetection
-        fields = ['model_weight', 'input_image', 'confidence', 'overlap']
+        fields = ['model', 'input_image', 'confidence', 'overlap']
         widgets = {
             'confidence': forms.NumberInput(attrs={
                 'step': '0.01',
