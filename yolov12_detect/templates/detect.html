@@ -2,71 +2,21 @@
 
 {% block content %}
 <div class="container">
-    <h2>YOLO Object Detection</h2>
+    <h2>Configure Detection Parameters</h2>
     
-    <form method="post" enctype="multipart/form-data">
+    <div class="mb-4">
+        <a href="{% url 'yolov12_detect:upload_model' %}" class="btn btn-outline-primary">
+            Upload/Select Model Weight
+        </a>
+        <a href="{% url 'yolov12_detect:upload_image' %}" class="btn btn-outline-primary">
+            Upload/Select Test Image
+        </a>
+    </div>
+    
+    <form method="post">
         {% csrf_token %}
-        <div class="form-group">
-            {{ form.model_weight.label_tag }}
-            {{ form.model_weight }}
-        </div>
-        
-        <div class="form-group">
-            {{ form.input_image.label_tag }}
-            {{ form.input_image }}
-        </div>
-        
-        <div class="form-group">
-            {{ form.confidence.label_tag }}
-            {{ form.confidence }}
-        </div>
-        
-        <div class="form-group">
-            {{ form.overlap.label_tag }}
-            {{ form.overlap }}
-        </div>
-        
+        {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Detect Objects</button>
     </form>
-
-    {% if detection and detection.output_image %}
-    <div class="result-section">
-        <h3>Detection Results</h3>
-        
-        {% if detection.total_detections > 0 %}
-        <div class="alert alert-info">
-            <h4>Detection Summary</h4>
-            <p>Total Objects Detected: {{ detection.total_detections }}</p>
-            
-            {% if detection.class_counts %}
-            <h5>Breakdown by Class:</h5>
-            <ul>
-                {% for class_name, count in detection.class_counts.items %}
-                <li>{{ class_name }}: {{ count }} object(s)</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-        {% else %}
-        <div class="alert alert-warning">
-            No objects detected in the image.
-        </div>
-        {% endif %}
-
-        <div class="row">
-            <div class="col-md-6">
-                <h4>Input Image</h4>
-                <img src="{{ detection.input_image.url }}" class="img-fluid">
-            </div>
-            <div class="col-md-6">
-                <h4>Output Image</h4>
-                <img src="{{ detection.output_image.url }}" class="img-fluid">
-                <a href="{{ detection.output_image.url }}" download class="btn btn-success mt-2">
-                    Download Detected Image
-                </a>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
