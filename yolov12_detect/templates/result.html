@@ -3,7 +3,19 @@
 {% block content %}
 <div class="container">
     <h2>Detection Results</h2>
-    
+
+    <div class="mb-4">
+        <a href="{% url 'yolov12_detect:upload_model' %}" class="btn btn-outline-primary">
+            Upload/Select Model Weight
+        </a>
+        <a href="{% url 'yolov12_detect:upload_image' %}" class="btn btn-outline-primary">
+            Upload/Select Test Image
+        </a>
+        <a href="{% url 'yolov12_detect:detect_objects' %}" class="btn btn-outline-primary">
+            Perform Another Detection
+        </a>
+    </div>
+
     {% if detection.total_detections > 0 %}
     <div class="alert alert-info">
         <h4>Detection Summary</h4>

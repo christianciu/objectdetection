@@ -4,6 +4,15 @@
 <div class="container">
     <h2>Configure Detection Parameters</h2>
     
+    <div class="mb-4">
+        <a href="{% url 'yolov12_detect:upload_model' %}" class="btn btn-outline-primary">
+            Upload/Select Model Weight
+        </a>
+        <a href="{% url 'yolov12_detect:upload_image' %}" class="btn btn-outline-primary">
+            Upload/Select Test Image
+        </a>
+    </div>
+    
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
