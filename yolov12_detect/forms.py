@@ -32,3 +32,8 @@ class DetectionForm(forms.ModelForm):
                 'default': '0.45'
             })
         }
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields['model'].queryset = YOLOModel.objects.order_by('-uploaded_at')
+        self.fields['input_image'].queryset = DetectionImage.objects.order_by('-uploaded_at')
