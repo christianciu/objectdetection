@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils import timezone
+
+TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 class YOLOModel(models.Model):
@@ -7,7 +10,7 @@ class YOLOModel(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {timezone.localtime(self.uploaded_at).strftime(TIME_FORMAT)}"
 
 
 class DetectionImage(models.Model):
@@ -16,7 +19,7 @@ class DetectionImage(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {timezone.localtime(self.uploaded_at).strftime(TIME_FORMAT)}"
 
 
 class YOLODetection(models.Model):
