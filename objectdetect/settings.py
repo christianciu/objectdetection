@@ -30,6 +30,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# MOVE THIS TO LOCAL SETTINGS IF RUN IN PROD
+if DEBUG:
+    EXTRA_INSTALLED_APPS = ['debug_toolbar']
+    INSTALLED_APPS = list(INSTALLED_APPS) + EXTRA_INSTALLED_APPS
+    MIDDLEWARE = list(MIDDLEWARE) + ['debug_toolbar.middleware.DebugToolbarMiddleware']
+
+    INTERNAL_IPS = [
+        # ...
+        "127.0.0.1",
+        # ...
+    ]
+
 ROOT_URLCONF = 'objectdetect.urls'
 
 TEMPLATES = [

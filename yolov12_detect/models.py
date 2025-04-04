@@ -34,3 +34,24 @@ class YOLODetection(models.Model):
 
     def __str__(self):
         return f"Detection {self.id}"
+
+
+class MultiWeightDetection(models.Model):
+    input_image = models.ForeignKey(DetectionImage, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"MultiDetection {self.id}"
+
+
+class MultiWeightDetectionResult(models.Model):
+    parent_detection = models.ForeignKey(MultiWeightDetection, related_name='results', on_delete=models.CASCADE)
+    detection = models.OneToOneField(YOLODetection, on_delete=models.CASCADE)
+    weight = models.ForeignKey(YOLOModel, on_delete=models.CASCADE)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"Result {self.id} for {self.parent_detection}"
