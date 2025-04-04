@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Multi-Weight Detection Results</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Input Image: {{ input_image.name }}</h3>
+        </div>
+        <div class="card-body">
+            <img src="{{ input_image.image_file.url }}" class="img-fluid mb-3">
+        </div>
+    </div>
+    
+    <div class="row">
+        {% for detection in detections %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{ detection.model.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert {% if detection.total_detections > 0 %}alert-info{% else %}alert-warning{% endif %}">
+                        <h5>Detection Summary</h5>
+                        <p>Total Objects Detected: {{ detection.total_detections }}</p>
+                        {% if detection.class_counts %}
+                        <h6>Breakdown by Class:</h6>
+                        <ul>
+                            {% for class_name, count in detection.class_counts.items %}
+                            <li>{{ class_name }}: {{ count }} object(s)</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                    
+                    <img src="{{ detection.output_image.url }}" class="img-fluid mb-2">
+                    <a href="{{ detection.output_image.url }}" download class="btn btn-sm btn-success">
+                        Download Result
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <a href="{% url 'yolov12_detect:multi_weight_detection' %}" class="btn btn-primary">
+        Perform Another Detection
+    </a>
+</div>
+{% endblock %}
