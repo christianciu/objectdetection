@@ -214,8 +214,8 @@ def multi_weight_result(request, detection_id):
 
 
 def detection_history(request):
-    single_detections = YOLODetection.objects.filter(multiweightdetectionresult__isnull=True)
-    multi_detections = MultiWeightDetection.objects.all()
+    single_detections = YOLODetection.objects.select_related('input_image', 'model').filter(multiweightdetectionresult__isnull=True).order_by('-id')
+    multi_detections = MultiWeightDetection.objects.select_related('input_image').prefetch_related('results__weight').order_by('-id')
     
     return render(request, 'detection_history.html', {
         'single_detections': single_detections,
