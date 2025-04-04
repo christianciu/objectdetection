@@ -13,6 +13,10 @@ from .models import (DetectionImage, MultiWeightDetection,
                      MultiWeightDetectionResult, YOLODetection, YOLOModel)
 
 
+def home(request):
+    return render(request, 'home.html')
+
+
 def upload_model(request):
     if request.method == 'POST':
         form = ModelUploadForm(request.POST, request.FILES)

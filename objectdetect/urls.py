@@ -3,10 +3,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from yolov12_detect.views import detect_objects
+from yolov12_detect.views import home
 
 urlpatterns = [
-    path('', detect_objects),
+    path('', home),
     path('admin/', admin.site.urls),
     path('object-detect/', include('yolov12_detect.urls')),
 ]
