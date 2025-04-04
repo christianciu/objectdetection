@@ -2,3 +2,4 @@ ultralytics
 opencv-python
 numpy
 django
+django-debug-toolbar==5.1.0
