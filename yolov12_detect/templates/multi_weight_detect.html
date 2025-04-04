@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Multi-Weight Object Detection</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Image Selection</h3>
+            </div>
+            <div class="card-body">
+                {{ image_form.as_p }}
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Model Weights Configuration</h3>
+            </div>
+            <div class="card-body">
+                {{ formset.management_form }}
+                <div id="weight-forms">
+                    {% for form in formset %}
+                    <div class="weight-form card mb-3">
+                        <div class="card-body">
+                            {{ form.as_p }}
+                            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="button" id="add-weight" class="btn btn-secondary mb-3">
+                    Add Another Weight
+                </button>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            Process with Selected Weights
+        </button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Dynamic form addition
+    const addButton = document.getElementById('add-weight');
+    if (addButton) {
+        addButton.addEventListener('click', function() {
+            const formCount = document.getElementById('id_form-TOTAL_FORMS');
+            const formsContainer = document.getElementById('weight-forms');
+            const newForm = formsContainer.querySelector('.weight-form').cloneNode(true);
+            const newIndex = parseInt(formCount.value);
+            
+            // Update all names/ids in the cloned form
+            newForm.innerHTML = newForm.innerHTML.replace(/form-(\d+)-/g, `form-${newIndex}-`);
+            newForm.innerHTML = newForm.innerHTML.replace(/id_form-(\d+)-/g, `id_form-${newIndex}-`);
+            
+            // Clear values
+            const inputs = newForm.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (input.type !== 'hidden' && !input.name.includes('DELETE')) {
+                    input.value = '';
+                    if (input.tagName === 'SELECT') {
+                        input.selectedIndex = 0;
+                    }
+                }
+            });
+            
+            formsContainer.appendChild(newForm);
+            formCount.value = newIndex + 1;
+        });
+    }
+});
+</script>
+{% endblock %}

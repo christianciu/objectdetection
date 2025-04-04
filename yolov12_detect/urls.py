@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 app_name = 'yolov12_detect'
@@ -11,4 +12,6 @@ urlpatterns = [
     path('select-image/', views.upload_image, name='select_image'),
     path('detect/', views.detect_objects, name='detect_objects'),
     path('result/<int:detection_id>/', views.detection_result, name='detection_result'),
+
+    path('multi-weight/', views.multi_weight_detection, name='multi_weight_detection'),
 ]
