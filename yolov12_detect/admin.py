@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import YOLOModel, YOLODetection, DetectionImage
+from .models import YOLOModel, YOLODetection, DetectionImage, MultiWeightDetection
 
 
 @admin.register(YOLOModel)
@@ -15,4 +15,8 @@ class YOLODetectionAdmin(admin.ModelAdmin):
 
 @admin.register(DetectionImage)
 class DetectionImageAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(MultiWeightDetection)
+class MultiWeightDetectionAdmin(admin.ModelAdmin):
     pass

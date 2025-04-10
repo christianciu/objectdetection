@@ -18,7 +18,7 @@ class ImageUploadForm(forms.ModelForm):
 class DetectionForm(forms.ModelForm):
     class Meta:
         model = YOLODetection
-        fields = ['model', 'input_image', 'confidence', 'overlap']
+        fields = ['model', 'input_image', 'resize_width', 'resize_height', 'confidence', 'overlap']
         widgets = {
             'confidence': forms.NumberInput(attrs={
                 'step': '0.01',
@@ -46,6 +46,10 @@ class MultiWeightDetectionForm(forms.Form):
         label="Select Image"
     )
 
+    resize_width = forms.IntegerField(initial=640)
+    resize_height = forms.IntegerField(initial=640)
+
+
 class WeightConfigForm(forms.Form):
     weight = forms.ModelChoiceField(queryset=YOLOModel.objects.order_by('-uploaded_at'))
     confidence = forms.FloatField(
@@ -66,6 +70,7 @@ class WeightConfigForm(forms.Form):
             'class': 'form-control'
         })
     )
+
 
 WeightConfigFormSet = forms.formset_factory(
     WeightConfigForm,

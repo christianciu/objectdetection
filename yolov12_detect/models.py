@@ -24,7 +24,11 @@ class DetectionImage(models.Model):
 
 class YOLODetection(models.Model):
     model = models.ForeignKey(YOLOModel, on_delete=models.CASCADE, blank=True, null=True)
+
     input_image = models.ForeignKey(DetectionImage, on_delete=models.CASCADE)
+    resize_width = models.PositiveIntegerField(default=640)
+    resize_height = models.PositiveIntegerField(default=640)
+
     output_image = models.ImageField(upload_to='output_images/', null=True, blank=True)
     confidence = models.FloatField(default=0.5)
     overlap = models.FloatField(default=0.45)
@@ -38,6 +42,9 @@ class YOLODetection(models.Model):
 
 class MultiWeightDetection(models.Model):
     input_image = models.ForeignKey(DetectionImage, on_delete=models.CASCADE)
+    resize_width = models.PositiveIntegerField(default=640)
+    resize_height = models.PositiveIntegerField(default=640)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
