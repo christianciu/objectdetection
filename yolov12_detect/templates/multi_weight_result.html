@@ -12,6 +12,8 @@
         <div class="card-body">
             <img src="{{ input_image.image_file.url }}" class="img-fluid mb-3">
             <p class="mb-0"><strong>Image Name:</strong> {{ input_image.name }}</p>
+            <p class="mb-0"><strong>Image Width:</strong> {{ parent_detection.resize_width }}</p>
+            <p class="mb-0"><strong>Image Height:</strong> {{ parent_detection.resize_height }}</p>
         </div>
     </div>
     

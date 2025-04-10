@@ -18,9 +18,16 @@
 
     {% if detection.total_detections > 0 %}
     <div class="alert alert-info">
-        <h4>Detection Summary</h4>
+        <h4>Image Data</h4>
+        <p class="mb-0"><strong>Image Name:</strong> {{ detection.input_image.name }}</p>
+        <p class="mb-0"><strong>Image Width:</strong> {{ detection.resize_width }}</p>
+        <p class="mb-0"><strong>Image Height:</strong> {{ detection.resize_height }}</p>
+        <br>
+
+        <h4>Detection Summary</h4>    
         <p>Total Objects Detected: {{ detection.total_detections }}</p>
-        
+        <br>
+
         {% if detection.class_counts %}
         <h5>Breakdown by Class:</h5>
         <ul>
